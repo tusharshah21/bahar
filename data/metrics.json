@@ -1,0 +1,86 @@
+{
+  "TabPFN": {
+    "MAE": 6.9,
+    "RMSE": 9.23
+  },
+  "Gradient boosting (all history)": {
+    "MAE": 6.76,
+    "RMSE": 9.02
+  },
+  "Same as yesterday": {
+    "MAE": 8.35,
+    "RMSE": 10.94
+  },
+  "backtest": [
+    {
+      "start": "2025-07-08",
+      "train_hours": 2160,
+      "TabPFN": 5.51,
+      "Gradient boosting": 5.8,
+      "Same as yesterday": 6.3
+    },
+    {
+      "start": "2025-08-22",
+      "train_hours": 3240,
+      "TabPFN": 3.19,
+      "Gradient boosting": 3.11,
+      "Same as yesterday": 4.32
+    },
+    {
+      "start": "2025-10-06",
+      "train_hours": 4320,
+      "TabPFN": 12.14,
+      "Gradient boosting": 11.98,
+      "Same as yesterday": 9.76
+    },
+    {
+      "start": "2025-11-20",
+      "train_hours": 5400,
+      "TabPFN": 10.27,
+      "Gradient boosting": 11.58,
+      "Same as yesterday": 10.64
+    },
+    {
+      "start": "2026-01-04",
+      "train_hours": 6480,
+      "TabPFN": 7.9,
+      "Gradient boosting": 11.3,
+      "Same as yesterday": 10.06
+    },
+    {
+      "start": "2026-02-18",
+      "train_hours": 7560,
+      "TabPFN": 8.69,
+      "Gradient boosting": 9.19,
+      "Same as yesterday": 9.04
+    },
+    {
+      "start": "2026-04-04",
+      "train_hours": 8640,
+      "TabPFN": 7.76,
+      "Gradient boosting": 7.61,
+      "Same as yesterday": 8.72
+    },
+    {
+      "start": "2026-05-19",
+      "train_hours": 9720,
+      "TabPFN": 8.77,
+      "Gradient boosting": 7.49,
+      "Same as yesterday": 8.45
+    },
+    {
+      "start": "2026-07-03",
+      "train_hours": 10800,
+      "TabPFN": 3.56,
+      "Gradient boosting": 3.31,
+      "Same as yesterday": 4.33
+    },
+    {
+      "start": "2026-08-17",
+      "train_hours": 11880,
+      "TabPFN": 3.47,
+      "Gradient boosting": 3.65,
+      "Same as yesterday": 4.4
+    }
+  ]
+}
