@@ -2,6 +2,10 @@
 
 **The best hour today to go outside, then off your screen.**
 
+![Bahar picks the best window and Gemma writes the plan](data/demo.gif)
+
+<!-- Full demo video: on github.com, edit this file and drag brag-output/brag.mp4 onto the next line. GitHub replaces it with a playable video link. -->
+
 Bahar ("outside" in Hindi/Urdu) forecasts hourly PM2.5 for your city with **TabPFN**, combines it with heat and rain into a "go outside" score, finds the best window, and has **Gemma** (running locally) tell you the plan in two sentences. Everything core runs on a laptop with no paid API.
 
 Built for the DEV Hacktoberfest Open-Source AI Challenge, Week 1: *Touch Grass*.

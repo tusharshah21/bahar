@@ -6,28 +6,46 @@ tags: devchallenge, opensource, ai, python
 
 *This is a submission for the DEV Hacktoberfest Open-Source AI Challenge, Week 1: Touch Grass.*
 
+Quick question before you scroll: **when did you last step outside on purpose?** Not to get to the car. Not to grab a delivery. Just to be outside.
+
+If you had to think about it, this one's for you.
+
 ## What I Built
 
-Bahar ("outside" in Hindi and Urdu) answers one question every morning: **when is the best hour today to get out of the house?**
+Here's a morning you might recognise. You decide to go for a walk. You open the air quality app: PM2.5 is "Moderate", whatever that means for the next hour. You open the weather app: it'll feel like 38°C by noon. You open a third app to check for rain. Ten minutes later you're still on your phone, still inside.
 
-In Hyderabad that question isn't trivial. Air quality changes a lot over a single day, summer afternoons can feel hotter than 40°C, and the monsoon brings sudden rain. Weather apps show you all of that as six separate charts. Bahar turns it into one sentence and then tells you to put your phone down.
+That loop is worse in a city like Hyderabad, where air quality changes a lot over a single day, summer afternoons can feel hotter than 40°C, and the monsoon brings sudden rain. So I built **Bahar** ("outside" in Hindi and Urdu). It answers exactly one question:
 
-How it works:
+> **When is the best hour today to get out of the house?**
 
-1. It pulls about 18 months of hourly weather and PM2.5 history for the city from Open-Meteo (free, no key).
-2. **TabPFN** forecasts PM2.5 for every remaining hour today from the weather forecast.
-3. Each hour gets a score: air quality using India's National AQI bands (55%), heat using the "feels like" temperature (30%), and rain (15%). Bahar picks the best 1 to 3 hour window between 5 AM and 7 PM.
-4. **Gemma 4**, running locally in Ollama, writes the plan in two or three sentences, and the app can read it aloud offline.
+No charts to read. One time range, two sentences, and then it tells you to put your phone down.
 
-Everything runs on my laptop: a Windows machine with an i7, 16 GB of RAM and no GPU. There's no paid API. The only network calls are the weather requests and TabPFN's license check.
+Under the hood, four steps:
+
+1. 🌦️ **Look back.** Pull about 18 months of hourly weather and PM2.5 history for the city from Open-Meteo (free, no key).
+2. 🔮 **Look ahead.** **TabPFN** forecasts PM2.5 for every hour today from the weather forecast.
+3. ⚖️ **Weigh it up.** Score every hour: air quality by India's National AQI bands (55%), heat by the "feels like" temperature (30%), rain (15%). Pick the best 1 to 3 hour window between 5 AM and 7 PM.
+4. 💬 **Say it like a friend.** **Gemma 4**, running locally in Ollama, writes the plan in two or three sentences, and the app can read it aloud offline.
+
+All of it runs on my laptop: Windows, an i7, 16 GB of RAM, no GPU. No paid API. The only network calls are the weather requests and TabPFN's license check.
 
 ## Demo
 
-![The Bahar app](UPLOAD data/app_screenshot.png)
+[Attach the demo video here]
 
-Here's the plan in the screenshot, word for word as Gemma wrote it:
+Let's play a quick game first. Tomorrow's PM2.5 forecast for Hyderabad looked like this: higher overnight, a small bump around 6 AM, cleanest in the early afternoon, then climbing again after 5 PM.
+
+**Which window do you think Bahar picked?**
+
+{% details 👉 Make your guess, then click to see Bahar's answer %}
+
+**5:00 AM to 8:00 AM.** Not the cleanest air of the day, but the coolest hours: it feels like 28°C at 5 AM and already over 32°C by 9. Bahar weighs heat too. Here's the plan, word for word as Gemma wrote it:
 
 > Wake up for your outdoor session between 5:00 AM and 8:00 AM when the air quality is Satisfactory. Go for a run, cycle, or play cricket before the worst stretch around 11:00 AM. Put your phone away and enjoy the Hyderabad morning.
+
+{% enddetails %}
+
+![The Bahar app](UPLOAD data/app_screenshot.png)
 
 ## Code
 
@@ -40,22 +58,40 @@ python bahar.py             # today's plan, printed and spoken
 streamlit run app.py        # the one-screen app
 ```
 
+🏙️ **Try it for your city.** Open `config.py`, change `CITY`, `LAT`, `LON` and `TIMEZONE`, and run the four commands above. I'd love to see what Bahar says about yours.
+
 ## How I Used TabPFN
 
-TabPFN is a foundation model for tables. Instead of training, you hand it example rows at prediction time and it learns from them in context. For Bahar, each row is one hour: temperature, humidity, wind (split into east and north components), rain, cloud cover, boundary layer height, time of day and season encoded as sine and cosine, and PM2.5 at the same hour yesterday. TabPFN sees 2,000 example hours, half from the most recent weeks and half sampled from the whole history, so it remembers what last winter looked like.
+TabPFN is a foundation model for tables, and it works differently from what I was used to. There's no training loop. You hand it example rows at prediction time and it learns from them in context, a bit like showing a friend a few hundred past days and asking "so what about tomorrow?"
 
-Adding **boundary layer height** helped the most. It's the height of the air layer that pollution mixes into. On calm winter nights that layer drops to a couple of hundred metres and PM2.5 has nowhere to go.
+For Bahar, each row is one hour: temperature, humidity, wind (split into east and north components), rain, cloud cover, boundary layer height, time of day and season encoded as sine and cosine, and PM2.5 at the same hour yesterday. TabPFN sees 2,000 example hours, half from the most recent weeks and half sampled from the whole history, so it still remembers what last winter looked like.
 
-### Does it actually beat a normal model?
+The feature that helped most is one most people have never heard of: **boundary layer height**. It's the height of the air layer that pollution mixes into. On calm winter nights it drops to a couple of hundred metres, and PM2.5 has nowhere to go. That's the smog you can taste.
 
-I wanted an honest answer, so I compared TabPFN against two baselines:
+### Plot twist: TabPFN lost. At first.
 
-- **Gradient boosting** (scikit-learn's HistGradientBoostingRegressor) trained on the **full** history, not just 2,000 rows.
-- **Same as yesterday**: predict that each hour will match the same hour yesterday.
+I'll be honest about how this went, because it surprised me.
 
-A single test period turned out to be misleading. On the last three weeks alone, gradient boosting edged out TabPFN (6.76 vs 6.90 mean absolute error, in µg/m³). Depending on which random sample of history TabPFN saw, it could win or lose that comparison. So I built a rolling backtest instead: ten 3-week windows spread across the year. Each model is trained only on the hours before its window, so nothing peeks into the future. The short version: **through the winter smog season, TabPFN's forecast errors were 16% lower than gradient boosting's.**
+My first test was the obvious one: train on everything up to three weeks ago, forecast the last three weeks. TabPFN lost to plain gradient boosting (6.90 vs 6.76 mean absolute error, in µg/m³). And it took **20 minutes** on my laptop to get there.
+
+The 20 minutes turned out to be an easy fix. Setting `n_estimators=1` gave almost the same accuracy and ran about 20 times faster. A full plan now takes about a minute.
+
+The loss was more interesting. When I re-ran the test with different random samples of history, TabPFN sometimes won and sometimes lost. Three weeks was simply too small a window to judge anything. So I asked a better question: **how does each model do across a whole year of seasons?**
+
+I built a rolling backtest: ten 3-week windows spread from July 2025 to August 2026, each model trained only on the hours before its window, so nothing peeks into the future. Two opponents:
+
+- 🌲 **Gradient boosting** (scikit-learn's HistGradientBoostingRegressor), trained on the **full** history, not just 2,000 rows.
+- 🔁 **Same as yesterday**: predict that each hour will match the same hour yesterday.
 
 ![Forecast error through the seasons](UPLOAD data/backtest.png)
+
+Look at the shaded winter months on the chart. That's where it gets good:
+
+> **Through the November to February smog season, TabPFN's forecast errors were 16% lower than gradient boosting's.**
+
+That's the stretch when choosing the right hour matters most for your lungs. Across the whole year TabPFN also had the lowest average error, about 5% better than gradient boosting, while only ever looking at 2,000 rows.
+
+{% details 📊 See every window (for the numbers people) %}
 
 | Window starts | Hours of history | TabPFN | Gradient boosting | Same as yesterday |
 |---|---|---|---|---|
@@ -73,26 +109,28 @@ A single test period turned out to be misleading. On the last three weeks alone,
 
 Mean absolute error in µg/m³, lower is better. TabPFN's scores are averaged over three different samples of history.
 
-What I take from it:
+{% enddetails %}
 
-- **In smog season, TabPFN's error is 16% lower than gradient boosting's.** That's the average across the November to February windows, the weeks when picking the right hour to go outside matters most for your lungs.
-- **TabPFN also has the lowest average error across the whole year**, about 5% better than gradient boosting, even though it only ever sees 2,000 rows.
-- **The overall win count is a tie** (5 windows each). Gradient boosting's wins are small and come later in the year, once it has more than 8,500 hours to learn from.
-- **Both models had a bad October.** In the first weeks after the monsoon, "same as yesterday" beat them both. The air changes in ways that last year's pattern doesn't capture well yet.
+It isn't a clean sweep, and I don't want to pretend it is:
 
-A practical note on running TabPFN on a CPU laptop: the default settings took about 20 minutes per evaluation. Setting `n_estimators=1` scored within noise of the default and runs about 20 times faster, so a full plan now takes about a minute.
+- **Count the wins and it's a tie**, 5 windows each. Gradient boosting's wins are small and come later in the year, once it has more than 8,500 hours to learn from.
+- **October humbled everyone.** In the first weeks after the monsoon, "same as yesterday" beat both models. The air shifts in ways last year's pattern doesn't capture yet.
 
 ## How I Used Gemma
 
-Gemma 4 (`gemma4:e4b-it-qat`, the quantization-aware 4B-effective model) runs locally through Ollama. On my CPU it writes a plan in about 20 seconds.
+If TabPFN is Bahar's brain, Gemma is its voice.
 
-The prompt gives Gemma a short list of facts (the window, the air quality band and PM2.5, the "feels like" temperature, a suggested activity, the worst stretch of the day) and tells it not to invent anything else. It writes 2 or 3 sentences, warm and direct, and ends by telling you to put the phone away. I wanted the numbers to stay with the forecasting model and the voice to come from the language model.
+Gemma 4 (`gemma4:e4b-it-qat`, the quantization-aware 4B-effective model) runs locally through Ollama and writes a plan in about 20 seconds on my CPU. I gave it a clear division of labour: the numbers come from the forecast, the words come from Gemma. The prompt hands it a short list of facts (the window, the air quality band and PM2.5, the "feels like" temperature, a suggested activity, the worst stretch of the day) and asks for two or three warm, direct sentences that end with "put the phone away".
 
-"Do not invent other facts" turned out not to be enough. Gemma is friendly by nature, and it kept upgrading the air: given "Satisfactory", it wrote "good", "perfect" or "best" in 5 of 6 test runs. That matters, because a reader with asthma would plan differently for each. So the prompt now tells Gemma to use the air quality label word for word, never to upgrade it, and to mention no times or numbers beyond the facts it was given. On the same facts, all 8 test runs followed those rules.
+Then Gemma taught me two things.
 
-One thing that tripped me up: Gemma 4 can think before it answers. With a 120-token budget it sometimes spent every token thinking and returned an empty reply. Passing `"think": false` to Ollama fixed it. For a two-sentence nudge, thinking adds latency without adding much.
+**Lesson one: Gemma can overthink.** Gemma 4 can reason before it answers. With a 120-token budget, it sometimes spent every single token thinking and handed back an empty reply. Passing `"think": false` to Ollama fixed it. A two-sentence nudge doesn't need deep thought.
 
-If Ollama isn't running, Bahar falls back to a template sentence. If TabPFN isn't available, it falls back to gradient boosting. Either way it still gives you a plan.
+**Lesson two: Gemma is too nice.** I'd written "do not invent other facts" in the prompt. Gemma still kept upgrading the air. Given "Satisfactory", it wrote "good", "perfect" or "best" in **5 of 6** test runs. That sounds harmless until you think about someone with asthma, who would plan their day very differently around "Satisfactory" and "perfect".
+
+So I tightened the prompt: use the air quality label word for word, never upgrade it, and mention no times or numbers beyond the facts given. Same facts, 8 new runs: **0 of 8** broke the rules. The plans are a little less bubbly now, and a lot more trustworthy.
+
+And if anything's missing, Bahar still shows up. No Ollama? A template sentence. No TabPFN? Gradient boosting. You always get a plan.
 
 ## Honest caveats
 
@@ -101,6 +139,13 @@ If Ollama isn't running, Bahar falls back to a template sentence. If TabPFN isn'
 - With one winter in the data, I can't fully separate "TabPFN is better in winter" from "TabPFN is better when there's less history". Next winter will tell.
 - Recent TabPFN versions download their weights only after you accept a license with a free Prior Labs account.
 
-Every run appends to `data/plans_log.jsonl`, so I can check over time whether the hour Bahar picked actually felt good outside.
+Every run appends to `data/plans_log.jsonl`, so over time I can check whether the hour Bahar picked actually felt good outside.
 
-Now close this tab and go outside.
+## Your turn 👇
+
+I'd love to hear from you in the comments:
+
+- **What's the worst hour for air in your city?** Is it the morning rush, or the evening climb you can see in Hyderabad's forecast above?
+- **If you try Bahar for your city, what window did it pick?**
+
+And now, the most important instruction in this post: close this tab and go outside. 🌿

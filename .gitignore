@@ -9,3 +9,5 @@ brag-output/composition/.waveform-cache/
 brag-output/composition/snapshots/
 brag-output/composition/renders/
 brag-output/**/*.mp3
+brag-output/brag.mp4
+brag-output/brag.jpg
