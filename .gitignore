@@ -3,3 +3,9 @@ __pycache__/
 data/*.csv
 data/*.jsonl
 .claude/launch.json
+brag-output/composition/.hyperframes/
+brag-output/composition/.thumbnails/
+brag-output/composition/.waveform-cache/
+brag-output/composition/snapshots/
+brag-output/composition/renders/
+brag-output/**/*.mp3

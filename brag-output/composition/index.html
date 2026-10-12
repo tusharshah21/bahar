@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Bahar demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Source Sans 3";
+        src: url("assets/fonts/SourceSans3.woff2") format("woff2");
+        font-weight: 200 900;
+      }
+      :root {
+        --ink: #31333f;
+        --muted: #5f6170;
+        --teal: #2a9d8f;
+        --teal-ink: #1d6f65;
+        --teal-tint: rgba(42, 157, 143, 0.15);
+        --purple: #7b4fbf;
+        --paper: #fbfaf7;
+      }
+      body { margin: 0; background: #ffffff; color: var(--ink); font-family: "Source Sans 3", sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #ffffff; }
+      .clip { position: absolute; inset: 0; }
+      .inner { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 260px; }
+      .paper { background: var(--paper); }
+
+      /* Scene 1 */
+      .tiles { position: relative; height: 330px; }
+      .tile { position: absolute; display: flex; align-items: center; gap: 22px; padding: 26px 40px; border-radius: 26px;
+              background: #ffffff; border: 2px solid #e6e6ea; box-shadow: 0 14px 40px rgba(49, 51, 63, 0.08);
+              font-size: 46px; font-weight: 600; }
+      .dot { width: 34px; height: 34px; border-radius: 50%; }
+      #t1 { left: 40px; top: 0; } #t2 { left: 520px; top: 120px; } #t3 { left: 1000px; top: 20px; }
+      #q { font-size: 92px; font-weight: 700; text-align: center; margin-top: 40px; }
+
+      /* Scene 2: the app screen */
+      .kicker { letter-spacing: 0.12em; text-transform: uppercase; font-size: 30px; color: var(--muted); }
+      .big { font-size: 150px; font-weight: 700; line-height: 1.05; margin: 14px 0 26px; }
+      .pills { display: flex; gap: 18px; }
+      .pill { padding: 10px 30px; border-radius: 999px; background: var(--teal-tint); font-size: 34px; }
+      .plan { font-size: 42px; line-height: 1.5; margin: 34px 0 0; max-width: 1380px; }
+      .plan span { display: inline-block; }
+      .byline { margin-top: 22px; font-size: 28px; color: var(--teal-ink); font-weight: 600; }
+
+      /* Scene 3 / 4 */
+      h2 { font-size: 76px; font-weight: 700; margin: 0; }
+      .sub { font-size: 36px; color: var(--muted); margin-top: 10px; }
+      svg text { font-family: "Source Sans 3", sans-serif; }
+      .stat { font-size: 230px; font-weight: 800; color: var(--teal-ink); line-height: 0.95; }
+      .row { display: flex; align-items: center; gap: 80px; }
+      .foot { font-size: 26px; color: var(--muted); margin-top: 18px; }
+
+      /* Scene 5 */
+      .chip { display: block; width: fit-content; padding: 22px 42px; margin: 14px 0; border-radius: 22px; font-size: 54px;
+              font-weight: 600; background: #ffffff; border: 2px solid #e6e6ea; }
+      .chip b { color: var(--teal-ink); }
+
+      /* Scene 6 */
+      .center { align-items: center; text-align: center; }
+      .glow { position: absolute; left: 50%; top: 42%; width: 900px; height: 900px; margin: -450px 0 0 -450px; border-radius: 50%;
+              background: radial-gradient(circle, rgba(42, 157, 143, 0.18), rgba(42, 157, 143, 0) 65%); }
+      .word { font-size: 220px; font-weight: 800; letter-spacing: -0.02em; position: relative; }
+      .tag { font-size: 48px; color: var(--muted); position: relative; }
+      .close { font-size: 56px; font-weight: 700; margin-top: 60px; position: relative; color: var(--teal-ink); }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-wuwa" id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="21.5">
+      <!-- Scene 1: too many apps -->
+      <section data-hf-id="hf-ce86" id="s1" class="clip" data-start="0" data-duration="3.3" data-track-index="0">
+        <div data-hf-id="hf-z0c7" class="inner" id="s1i">
+          <div data-hf-id="hf-hovr" class="tiles">
+            <div data-hf-id="hf-k203" class="tile" id="t1"><span data-hf-id="hf-0f25" class="dot" style="background:#e07a5f"></span>AQI app</div>
+            <div data-hf-id="hf-7r6r" class="tile" id="t2"><span data-hf-id="hf-39r9" class="dot" style="background:#f2b134"></span>Weather app</div>
+            <div data-hf-id="hf-vdxj" class="tile" id="t3"><span data-hf-id="hf-3e5c" class="dot" style="background:#4a90d9"></span>Rain radar</div>
+          </div>
+          <div data-hf-id="hf-ub92" id="q">So... when do you go outside?</div>
+        </div>
+      </section>
+
+      <!-- Scene 2: the answer (recreated app.py screen) -->
+      <section data-hf-id="hf-yv38" id="s2" class="clip" data-start="3.3" data-duration="5.2" data-track-index="0">
+        <div data-hf-id="hf-z1fu" class="inner" id="s2i">
+          <div data-hf-id="hf-b2ga" class="kicker" id="kick">Bahar · Hyderabad · best window tomorrow</div>
+          <div data-hf-id="hf-dsxe" class="big" id="big">5:00 AM to 8:00 AM</div>
+          <div data-hf-id="hf-c9cw" class="pills"><span data-hf-id="hf-qjqx" class="pill" id="p1">Air: Satisfactory</span><span data-hf-id="hf-7be2" class="pill" id="p2">Feels 28.4°C</span></div>
+          <p data-hf-id="hf-v2nz" class="plan" id="plan">Wake up for your outdoor session between 5:00 AM and 8:00 AM when the air quality is Satisfactory. Go for a run, cycle, or play cricket before the worst stretch around 11:00 AM. Put your phone away and enjoy the Hyderabad morning.</p>
+          <div data-hf-id="hf-ogsw" class="byline" id="by">Written by Gemma 4, running locally</div>
+        </div>
+      </section>
+
+      <!-- Scene 3: why this window -->
+      <section data-hf-id="hf-vls7" id="s3" class="clip" data-start="8.5" data-duration="3.5" data-track-index="0">
+        <div data-hf-id="hf-ju5l" class="inner" id="s3i">
+          <h2 data-hf-id="hf-dx3f" id="h3">TabPFN forecasts every hour.</h2>
+          <div data-hf-id="hf-896r" class="sub" id="sub3">Air 55%, heat 30%, rain 15%: the cooler morning wins.</div>
+          <svg data-hf-id="hf-dwu8" id="chart" width="1400" height="540" viewBox="0 0 1400 540" style="margin-top:24px">
+            <rect data-hf-id="hf-oths" id="band" x="0" y="20" width="0" height="420" fill="rgba(42,157,143,0.16)" />
+            <text data-hf-id="hf-jxpl" id="bandlabel" x="0" y="60" font-size="25" font-weight="700" fill="#1d6f65">Best window</text>
+            <line data-hf-id="hf-6r02" x1="60" y1="440" x2="1360" y2="440" stroke="#d5d5db" stroke-width="2" />
+            <path data-hf-id="hf-pgt8" id="pmline" d="" fill="none" stroke="#2a9d8f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+            <g data-hf-id="hf-8inc" id="xlabels" font-size="24" fill="#5f6170" />
+            <text data-hf-id="hf-jh7o" x="60" y="525" font-size="24" fill="#5f6170">PM2.5 forecast for tomorrow, hour by hour</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Scene 4: the proof -->
+      <section data-hf-id="hf-fvqp" id="s4" class="clip" data-start="12" data-duration="3.8" data-track-index="0">
+        <div data-hf-id="hf-rdas" class="inner" id="s4i">
+          <div data-hf-id="hf-thy4" class="row">
+            <div data-hf-id="hf-yeow">
+              <div data-hf-id="hf-ovl5" class="stat" id="stat">0%</div>
+              <div data-hf-id="hf-vbqo" class="sub" id="sub4" style="max-width:700px">lower forecast error than gradient boosting in smog season</div>
+            </div>
+            <svg data-hf-id="hf-ugjd" id="spark" width="720" height="380" viewBox="0 0 720 380">
+              <rect data-hf-id="hf-di7a" id="winter" x="0" y="10" width="0" height="320" fill="rgba(42,157,143,0.12)" />
+              <path data-hf-id="hf-fnbz" id="gbline" d="" fill="none" stroke="#7b4fbf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+              <path data-hf-id="hf-69ic" id="tabline" d="" fill="none" stroke="#2a9d8f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+              <text data-hf-id="hf-fs8p" x="10" y="372" font-size="24" fill="#1d6f65" font-weight="700">TabPFN</text>
+              <text data-hf-id="hf-y4i1" x="130" y="372" font-size="24" fill="#6a43a8" font-weight="700">Gradient boosting</text>
+            </svg>
+          </div>
+          <div data-hf-id="hf-60gf" class="foot" id="foot">Average over the Nov to Feb windows of a 10-window seasonal backtest, Hyderabad, 2025 to 2026</div>
+        </div>
+      </section>
+
+      <!-- Scene 5: built with -->
+      <section data-hf-id="hf-n5u5" id="s5" class="clip" data-start="15.8" data-duration="2.7" data-track-index="0">
+        <div data-hf-id="hf-x8tf" class="inner" id="s5i">
+          <span data-hf-id="hf-10gy" class="chip" id="c1"><b data-hf-id="hf-x2mg">TabPFN</b> forecasts the air</span>
+          <span data-hf-id="hf-1p2g" class="chip" id="c2"><b data-hf-id="hf-4d0y">Gemma 4</b> writes the plan</span>
+          <span data-hf-id="hf-521m" class="chip" id="c3">Runs on a <b data-hf-id="hf-ganr">CPU laptop</b>. No paid API.</span>
+        </div>
+      </section>
+
+      <!-- Scene 6: outro -->
+      <section data-hf-id="hf-qu5s" id="s6" class="clip paper" data-start="18.5" data-duration="3" data-track-index="0">
+        <div data-hf-id="hf-35j2" class="glow" id="glow"></div>
+        <div data-hf-id="hf-w5gv" class="inner center" id="s6i">
+          <div data-hf-id="hf-4xzi" class="word" id="word">Bahar</div>
+          <div data-hf-id="hf-oury" class="tag" id="tag">The best hour today to go outside</div>
+          <div data-hf-id="hf-9xlh" class="close" id="close">Now put the phone down and head out.</div>
+        </div>
+      </section>
+
+      <!-- Audio -->
+      <audio data-hf-id="hf-728n" id="music" src="assets/music/happy-beats-business-moves-vol-10-by-ende-dot-app.mp3" data-start="0" data-duration="21.5" data-track-index="1" data-volume="1" data-automation="{&quot;version&quot;:1,&quot;lanes&quot;:[{&quot;target&quot;:&quot;volume&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:0},{&quot;t&quot;:0.5,&quot;v&quot;:0.35},{&quot;t&quot;:20,&quot;v&quot;:0.35},{&quot;t&quot;:21.5,&quot;v&quot;:0}]}]}"></audio>
+      <audio data-hf-id="hf-gjdx" id="sfx-t1" src="assets/sfx/click2.ogg" data-start="0.27" data-duration="0.06" data-track-index="2" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-jpxv" id="sfx-t2" src="assets/sfx/click2.ogg" data-start="0.82" data-duration="0.06" data-track-index="2" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-8hbj" id="sfx-t3" src="assets/sfx/click2.ogg" data-start="1.37" data-duration="0.06" data-track-index="2" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-9adv" id="sfx-big" src="assets/sfx/impactSoft_medium_001.ogg" data-start="3.75" data-duration="0.18" data-track-index="3" data-volume="0.8"></audio>
+      <audio data-hf-id="hf-vjz6" id="sfx-p1" src="assets/sfx/click2.ogg" data-start="4.25" data-duration="0.06" data-track-index="2" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-aj8f" id="sfx-p2" src="assets/sfx/click2.ogg" data-start="4.5" data-duration="0.06" data-track-index="2" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-z5qn" id="sfx-stat" src="assets/sfx/rollover2.ogg" data-start="13.3" data-duration="0.06" data-track-index="3" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-qve2" id="sfx-c1" src="assets/sfx/click2.ogg" data-start="15.82" data-duration="0.06" data-track-index="2" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-h217" id="sfx-c2" src="assets/sfx/click2.ogg" data-start="16.38" data-duration="0.06" data-track-index="2" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-5jbx" id="sfx-c3" src="assets/sfx/click2.ogg" data-start="16.93" data-duration="0.06" data-track-index="2" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-o6o6" id="sfx-word" src="assets/sfx/impactBell_heavy_000.ogg" data-start="18.55" data-duration="1.5" data-track-index="3" data-volume="0.55"></audio>
+    </div>
+
+    <script>
+      // Real data from the Bahar run shown in the app screenshot (hourly PM2.5 forecast, ug/m3).
+      const PM = [48.9, 44.7, 43.5, 42.0, 42.1, 45.5, 46.0, 39.3, 33.3, 32.2, 31.5, 31.0, 29.2, 29.5, 29.3, 29.8, 29.2, 31.3, 36.4, 39.5, 43.0, 44.5, 45.0, 44.5];
+      // Real backtest from data/metrics.json: [TabPFN MAE, gradient boosting MAE] per window.
+      const BT = [[5.51, 5.8], [3.19, 3.11], [12.14, 11.98], [10.27, 11.58], [7.9, 11.3], [8.69, 9.19], [7.76, 7.61], [8.77, 7.49], [3.56, 3.31], [3.47, 3.65]];
+
+      const hx = (h) => 60 + h * (1300 / 23);
+      const py = (v) => 430 - ((v - 25) / 27) * 360;
+      document.getElementById("pmline").setAttribute("d", PM.map((v, h) => (h ? "L" : "M") + hx(h).toFixed(1) + " " + py(v).toFixed(1)).join(" "));
+      const xl = document.getElementById("xlabels");
+      [0, 4, 8, 12, 16, 20, 23].forEach((h) => {
+        const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", hx(h) - 28); t.setAttribute("y", 468); t.textContent = String(h).padStart(2, "0") + ":00";
+        xl.appendChild(t);
+      });
+      const band = document.getElementById("band");
+      band.setAttribute("x", hx(5)); document.getElementById("bandlabel").setAttribute("x", hx(5) + 12);
+
+      const sx = (i) => 20 + i * (680 / 9);
+      const sy = (v) => 320 - ((v - 2) / 11) * 290;
+      const sline = (k) => BT.map((r, i) => (i ? "L" : "M") + sx(i).toFixed(1) + " " + sy(r[k]).toFixed(1)).join(" ");
+      document.getElementById("tabline").setAttribute("d", sline(0));
+      document.getElementById("gbline").setAttribute("d", sline(1));
+      const winter = document.getElementById("winter");
+      winter.setAttribute("x", sx(2.6));
+
+      // Plan text: one span per word so it can type in word by word.
+      const plan = document.getElementById("plan");
+      plan.innerHTML = plan.textContent.trim().split(/\s+/).map((w) => "<span>" + w + "</span>").join(" ");
+      const words = plan.querySelectorAll("span");
+
+      const dash = (el) => { const L = el.getTotalLength(); el.style.strokeDasharray = L; return L; };
+      const pmL = dash(document.getElementById("pmline"));
+      const tabL = dash(document.getElementById("tabline"));
+      const gbL = dash(document.getElementById("gbline"));
+
+      const tl = gsap.timeline({ paused: true });
+      const enter = (sel, t) => tl.fromTo(sel, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, t);
+      const leave = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.25, ease: "power1.in" }, t);
+
+      // Scene 1 (beat-grid: tiles at 0.27, 0.82, 1.37)
+      [["#t1", 0.27], ["#t2", 0.82], ["#t3", 1.37]].forEach(([s, t]) =>
+        tl.fromTo(s, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, t));
+      tl.to(".tile", { opacity: 0.35, y: 30, duration: 0.4, ease: "power2.out" }, 1.75);
+      enter("#q", 1.75);
+      leave("#s1i", 3.05);
+
+      // Scene 2
+      tl.fromTo("#s2i", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.3);
+      enter("#kick", 3.4);
+      tl.fromTo("#big", { opacity: 0, scale: 0.9, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(1.6)", transformOrigin: "left center" }, 3.7);
+      tl.fromTo("#p1", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)" }, 4.2);
+      tl.fromTo("#p2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)" }, 4.45);
+      tl.fromTo(words, { opacity: 0 }, { opacity: 1, duration: 0.12, stagger: 0.048 }, 4.8);
+      enter("#by", 6.85);
+      leave("#s2i", 8.25);
+
+      // Scene 3
+      enter("#h3", 8.6);
+      enter("#sub3", 8.8);
+      tl.fromTo("#pmline", { strokeDashoffset: pmL }, { strokeDashoffset: 0, duration: 1.4, ease: "power1.inOut" }, 9.0);
+      tl.fromTo("#xlabels", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 9.0);
+      tl.fromTo("#band", { attr: { width: 0 } }, { attr: { width: hx(8) - hx(5) }, duration: 0.45, ease: "power2.out" }, 10.4);
+      tl.fromTo("#bandlabel", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 10.6);
+      leave("#s3i", 11.75);
+
+      // Scene 4
+      const counter = { v: 0 };
+      const stat = document.getElementById("stat");
+      enter("#stat", 12.15);
+      tl.fromTo(counter, { v: 0 }, { v: 16, duration: 1.1, ease: "power2.out", onUpdate: () => { stat.textContent = Math.round(counter.v) + "%"; } }, 12.3);
+      enter("#sub4", 12.9);
+      tl.fromTo("#winter", { attr: { width: 0 } }, { attr: { width: sx(5.4) - sx(2.6) }, duration: 0.4 }, 13.3);
+      tl.fromTo("#gbline", { strokeDashoffset: gbL }, { strokeDashoffset: 0, duration: 1.0, ease: "power1.inOut" }, 13.4);
+      tl.fromTo("#tabline", { strokeDashoffset: tabL }, { strokeDashoffset: 0, duration: 1.0, ease: "power1.inOut" }, 13.5);
+      enter("#foot", 14.2);
+      leave("#s4i", 15.55);
+
+      // Scene 5 (beat-locked: 15.82; beat-grid chips at 15.82, 16.38, 16.93, then hold)
+      [["#c1", 15.82], ["#c2", 16.38], ["#c3", 16.93]].forEach(([s, t]) =>
+        tl.fromTo(s, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, t));
+      leave("#s5i", 18.25);
+
+      // Scene 6 (beat-locked: wordmark at 18.55)
+      tl.fromTo("#glow", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, 18.5);
+      tl.fromTo("#word", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 18.55);
+      enter("#tag", 19.0);
+      enter("#close", 19.5);
+      tl.to("#glow", { scale: 1.08, duration: 1.8, ease: "sine.inOut" }, 19.7);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

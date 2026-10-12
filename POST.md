@@ -23,11 +23,11 @@ Everything runs on my laptop: a Windows machine with an i7, 16 GB of RAM and no 
 
 ## Demo
 
-[Add a screenshot or short screen recording of the Streamlit app here]
+![The Bahar app](UPLOAD data/app_screenshot.png)
 
-Here's today's plan, word for word as Gemma wrote it:
+Here's the plan in the screenshot, word for word as Gemma wrote it:
 
-> Hey friend, let's hit the park between 5:00 and 6:00 PM when the air quality is good. A run or a cycle sounds perfect for that evening cool. Put your phone away and enjoy the fresh air.
+> Wake up for your outdoor session between 5:00 AM and 8:00 AM when the air quality is Satisfactory. Go for a run, cycle, or play cricket before the worst stretch around 11:00 AM. Put your phone away and enjoy the Hyderabad morning.
 
 ## Code
 
@@ -86,7 +86,9 @@ A practical note on running TabPFN on a CPU laptop: the default settings took ab
 
 Gemma 4 (`gemma4:e4b-it-qat`, the quantization-aware 4B-effective model) runs locally through Ollama. On my CPU it writes a plan in about 20 seconds.
 
-The prompt gives Gemma a short list of facts (the window, the air quality band and PM2.5, the "feels like" temperature, a suggested activity, the worst stretch of the day) and tells it not to invent anything else. It writes 2 or 3 sentences, warm and direct, and ends by telling you to put the phone away. I wanted the numbers to stay with the forecasting model and the voice to come from the language model, and keeping those jobs separate stops Gemma from making up an air quality reading.
+The prompt gives Gemma a short list of facts (the window, the air quality band and PM2.5, the "feels like" temperature, a suggested activity, the worst stretch of the day) and tells it not to invent anything else. It writes 2 or 3 sentences, warm and direct, and ends by telling you to put the phone away. I wanted the numbers to stay with the forecasting model and the voice to come from the language model.
+
+"Do not invent other facts" turned out not to be enough. Gemma is friendly by nature, and it kept upgrading the air: given "Satisfactory", it wrote "good", "perfect" or "best" in 5 of 6 test runs. That matters, because a reader with asthma would plan differently for each. So the prompt now tells Gemma to use the air quality label word for word, never to upgrade it, and to mention no times or numbers beyond the facts it was given. On the same facts, all 8 test runs followed those rules.
 
 One thing that tripped me up: Gemma 4 can think before it answers. With a 120-token budget it sometimes spent every token thinking and returned an empty reply. Passing `"think": false` to Ollama fixed it. For a two-sentence nudge, thinking adds latency without adding much.
 

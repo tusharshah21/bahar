@@ -14,6 +14,9 @@ Facts (do not invent others):
 
 Rules: 2 to 3 short sentences, under 60 words. Start with the window. Be warm and direct,
 like a friend nudging you out the door. End by telling them to put the phone away.
+Describe the air with the word "{air}" exactly; never call it good, great, perfect, best
+or fresh unless that is the word given. Mention no times other than the window and the
+worst stretch, and no numbers that are not in the facts.
 No lists, no emojis, no markdown."""
 
 
