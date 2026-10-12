@@ -22,6 +22,8 @@ No charts to read. One time range, two sentences, and then it tells you to put y
 
 Under the hood, four steps:
 
+![How Bahar works: look back, look ahead, weigh it up, say it](UPLOAD data/how_it_works.png)
+
 1. 🌦️ **Look back.** Pull about 18 months of hourly weather and PM2.5 history for the city from Open-Meteo (free, no key).
 2. 🔮 **Look ahead.** **TabPFN** forecasts PM2.5 for every hour today from the weather forecast.
 3. ⚖️ **Weigh it up.** Score every hour: air quality by India's National AQI bands (55%), heat by the "feels like" temperature (30%), rain (15%). Pick the best 1 to 3 hour window between 5 AM and 7 PM.
@@ -33,13 +35,17 @@ All of it runs on my laptop: Windows, an i7, 16 GB of RAM, no GPU. No paid API. 
 
 [Attach the demo video here]
 
-Let's play a quick game first. Tomorrow's PM2.5 forecast for Hyderabad looked like this: higher overnight, a small bump around 6 AM, cleanest in the early afternoon, then climbing again after 5 PM.
+Let's play a quick game first. Here's tomorrow's PM2.5 forecast for Hyderabad, hour by hour. Bahar only plans between 5 AM and 7 PM.
+
+![Your turn: which window would you pick?](UPLOAD data/forecast_guess.png)
 
 **Which window do you think Bahar picked?**
 
 {% details 👉 Make your guess, then click to see Bahar's answer %}
 
-**5:00 AM to 8:00 AM.** Not the cleanest air of the day, but the coolest hours: it feels like 28°C at 5 AM and already over 32°C by 9. Bahar weighs heat too. Here's the plan, word for word as Gemma wrote it:
+![Bahar's answer: 5:00 to 8:00 AM](UPLOAD data/forecast_answer.png)
+
+**5:00 AM to 8:00 AM.** Not the cleanest air of the day, but cooler hours: it feels like 28°C at 5 AM and already over 32°C by 9. Bahar weighs heat too. Here's the plan, word for word as Gemma wrote it:
 
 > Wake up for your outdoor session between 5:00 AM and 8:00 AM when the air quality is Satisfactory. Go for a run, cycle, or play cricket before the worst stretch around 11:00 AM. Put your phone away and enjoy the Hyderabad morning.
 
